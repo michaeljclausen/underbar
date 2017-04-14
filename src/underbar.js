@@ -160,13 +160,22 @@
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
-    let i = 0;
-    if (accumulator === undefined) {
-      i = 1;
-      accumulator = _.first(collection);
-    }
-    for (i; i < collection.length; i += 1) {
-      accumulator = iterator(accumulator, collection[i]);
+    if (Array.isArray(collection) === true) {
+      let i = 0;
+      if (accumulator === undefined) {
+        i = 1;
+        accumulator = _.first(collection);
+      }
+      for (i; i < collection.length; i += 1) {
+        accumulator = iterator(accumulator, collection[i]);
+      }
+    } else {
+      if (accumulator === undefined) {
+        accumulator = 0;
+      }
+      for (let key in collection) {
+        accumulator = iterator(accumulator, collection[key]);
+      }
     }
     return accumulator;
   };
